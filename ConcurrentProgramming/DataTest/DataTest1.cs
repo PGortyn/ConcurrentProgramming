@@ -7,7 +7,7 @@ namespace DataTest
         [Fact]
         public void Test1()
         {
-            DataClass dc = new DataClass();
+            Ball dc = new Ball();
             int result = dc.AddTest(1, 2);
             int expected = 3;
             Assert.Equal(expected, result);

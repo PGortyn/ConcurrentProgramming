@@ -1,6 +1,6 @@
 ﻿namespace Data
 {
-    public class DataClass
+    public class Ball
     {
         public int AddTest(int x, int y)
         {
