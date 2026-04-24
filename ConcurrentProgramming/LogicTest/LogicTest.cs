@@ -2,7 +2,7 @@ using Logic;
 
 namespace LogicTest
 {
-    public class LogicTest1
+    public class LogicTest
     {
         [Fact]
         public void Test1()
