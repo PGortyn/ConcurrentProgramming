@@ -1,35 +1,16 @@
 ﻿using System;
 using System.Windows.Input;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using Presentation.Model;
 
 namespace Presentation.ViewModel
 {
-    internal class CommandRelay : ICommand
-    {
-        private readonly Action m_Action;
-        
-        public CommandRelay(Action action)
-        {
-            m_Action = action;
-        }
-        
-        public bool CanExecute(object? parameter)
-        {
-            //TODO 
-            return true;
-        }
-        public void Execute(object? parameter)
-        {
-            m_Action();
-        }
-        public event EventHandler? CanExecuteChanged;
-    }
-
     public class ViewModel : INotifyPropertyChanged
     {
         protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
@@ -45,9 +26,37 @@ namespace Presentation.ViewModel
             set
             {
                 m_BallCount = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(BallCount));
             }
         }
+
+        public ObservableCollection<BallModel> BallsCollection { get; } = new();
+        
+        private double m_WindowWidth = 800;
+        private double m_WindowHeight = 450;
+
+        public double WindowWidth
+        {
+            get => m_WindowWidth;
+            set
+            {
+                m_WindowWidth = value;
+                OnPropertyChanged();
+                UpdateBorders();
+            }
+        }
+
+        public double WindowHeight
+        {
+            get => m_WindowHeight;
+            set
+            {
+                m_WindowHeight = value;
+                OnPropertyChanged();
+                UpdateBorders();
+            }
+        }
+        
         public ICommand AddCommand { get; }
         public ICommand CreateCommand { get; }
         
@@ -56,15 +65,6 @@ namespace Presentation.ViewModel
             AddCommand = new CommandRelay(AddBalls);
             CreateCommand = new CommandRelay(CreateBalls);
         }
-        
-        // protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
-        // {
-        //     if (EqualityComparer<T>.Default.Equals(field, value))
-        //         return false;
-        //     field = value;
-        //     OnPropertyChanged(propertyName);
-        //     return true;
-        // }
         
         private void AddBalls()
         {
@@ -75,8 +75,11 @@ namespace Presentation.ViewModel
         {
             
         }
-        
-        
+
+        private void UpdateBorders()
+        {
+            
+        }
         
     }
 }

@@ -19,7 +19,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" MinHeight="40"/>
+            <RowDefinition Height="Auto" MinHeight="50" />
             <RowDefinition/>
         </Grid.RowDefinitions>
         
@@ -30,6 +30,28 @@
         <Button Grid.Column="2" Margin="5.0" Content="Add" Command="{Binding AddCommand}"/>
         
         <Button Grid.Column="3" Margin="5.0" Content="Create" Command="{Binding CreateCommand}"/>
+        
+        <!-- CANVAS -->
+        <ItemsControl Grid.Row="1" Grid.ColumnSpan="4" ItemsSource="{Binding BallsCollection}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas Background="Green"></Canvas>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            
+            <ItemsControl.ItemContainerStyle>
+                <Style>
+                    <Setter Property="Canvas.Left" Value="{Binding PositionX}" />
+                    <Setter Property="Canvas.Top" Value="{Binding PositionY}" />
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+            
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Ellipse Width="{Binding Diameter}" Height="{Binding Diameter}" Fill="Red" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
         
     </Grid>
 </Window>
