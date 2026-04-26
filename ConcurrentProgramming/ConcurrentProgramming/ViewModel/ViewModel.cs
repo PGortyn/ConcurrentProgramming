@@ -75,8 +75,7 @@ namespace Presentation.ViewModel
         
         public ViewModel()
         {
-            
-            m_LogicManager = new LogicManager(m_CanvasWidth, m_CanvasHeight, m_UIAreaHeight);
+            m_LogicManager = new LogicManager(m_CanvasWidth, m_CanvasHeight);
             m_LogicManager.OnBallsUpdated += OnLogicUpdated;
             m_Timer = new DispatcherTimer();
             m_Timer.Interval = TimeSpan.FromMilliseconds(16);

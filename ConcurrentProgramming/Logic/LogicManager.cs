@@ -9,14 +9,12 @@ namespace Logic
         public List<Ball> Balls = new List<Ball>();
         public float Width { get; private set; }
         public float Height { get; private set; }
-        public float HeightOffset { get; private set; }
         private const int MAX_VELOCITY = 5;
         private const float MIN_RADIUS = 10f;
         private const float MAX_RADIUS = 30f;
 
-        public LogicManager(float width, float height, float heightOffset)
+        public LogicManager(float width, float height)
         {
-            HeightOffset = heightOffset;
             UpdateSize(width, height);
         }
 
@@ -51,7 +49,7 @@ namespace Logic
                     ball.UpdatePosition(Height, Width);
                 }
             }
-            OnBallsUpdated.Invoke(this, EventArgs.Empty);
+            OnBallsUpdated?.Invoke(this, EventArgs.Empty);
         }
 
         public void UpdateSize(float width, float height)

@@ -1,3 +1,4 @@
+using Data;
 using Logic;
 
 namespace LogicTest
@@ -7,9 +8,11 @@ namespace LogicTest
         [Fact]
         public void CreateLogicManagerTest()
         {
-            LogicManager lm = new LogicManager(200, 100, 50);
-            float expectedW = 200;
-            float expectedH = 150;
+            float w = 500;
+            float h = 300;
+            LogicManager lm = new LogicManager(w, h);
+            float expectedW = w;
+            float expectedH = h;
             Assert.Equal(lm.Width,expectedW);
             Assert.Equal(lm.Height,expectedH);
             
@@ -29,7 +32,9 @@ namespace LogicTest
         [Fact]
         public void AddBallsTest()
         {
-            LogicManager lm = new LogicManager(200, 100, 50);
+            float w = 500;
+            float h = 300;
+            LogicManager lm = new LogicManager(w, h);
             
             lm.AddBalls(4);
             float expectedAmount = 4;
@@ -42,6 +47,26 @@ namespace LogicTest
             lm.AddBalls(3, true);
             expectedAmount = 3;
             Assert.Equal(lm.Balls.Count, expectedAmount);
+        }
+
+        [Fact]
+        public void UpdateNonRealTimeTest()
+        {
+            float w = 500;
+            float h = 300;
+            LogicManager lm = new LogicManager(w, h);
+            
+            lm.AddBalls(1);
+            Ball ball = lm.Balls[0];
+            float expextedX = ball.Position.X + ball.Velocity.X;
+            expextedX = Math.Clamp(expextedX, 0 + ball.Radius, w - ball.Radius);
+            float expextedY = ball.Position.Y + ball.Velocity.Y;
+            expextedY = Math.Clamp(expextedY, 0 + ball.Radius, h - ball.Radius);
+            
+            lm.Update();
+            
+            Assert.Equal(lm.Balls[0].Position.X, expextedX);
+            Assert.Equal(lm.Balls[0].Position.Y, expextedY);
         }
     }
 }
