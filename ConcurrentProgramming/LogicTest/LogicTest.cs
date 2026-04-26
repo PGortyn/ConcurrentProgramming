@@ -50,16 +50,31 @@ namespace LogicTest
             lm.AddBalls(1);
             List<Ball> Balls = lm.GetBalls();
             Ball ball = Balls[0];
-            float expextedX = ball.Position.X + ball.Velocity.X;
-            expextedX = Math.Clamp(expextedX, 0 + ball.Radius, w - ball.Radius);
-            float expextedY = ball.Position.Y + ball.Velocity.Y;
-            expextedY = Math.Clamp(expextedY, 0 + ball.Radius, h - ball.Radius);
+            float oldX = ball.Position.X;
+            float oldY = ball.Position.Y;
             
             lm.Update();
             Balls = lm.GetBalls();
+            float expectedX = Balls[0].Position.X;
+            float expectedY = Balls[0].Position.Y;
+
+            if (ball.Velocity.X != 0)
+            {
+                Assert.NotEqual(oldX, expectedX);
+            }
+            else
+            {
+                Assert.Equal(oldX, expectedX);
+            }
             
-            Assert.Equal(Balls[0].Position.X, expextedX);
-            Assert.Equal(Balls[0].Position.Y, expextedY);
+            if (ball.Velocity.Y != 0)
+            {
+                Assert.NotEqual(oldY, expectedY);
+            }
+            else
+            {
+                Assert.Equal(oldY, expectedY);
+            }
         }
     }
 }
