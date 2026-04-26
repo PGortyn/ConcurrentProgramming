@@ -1,11 +1,11 @@
 using System.Windows.Input;
 namespace Presentation.ViewModel;
 
-public class CommandRelay : ICommand
+public class RelayCommand : ICommand
 {
     private readonly Action m_Action;
         
-    public CommandRelay(Action action)
+    public RelayCommand(Action action)
     {
         m_Action = action;
     }

@@ -3,15 +3,18 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:local="clr-namespace:ConcurrentProgramming"
         xmlns:viewModel="clr-namespace:Presentation.ViewModel"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800"
+        SizeChanged="Window_SizeChanged">
     <Window.DataContext>
         <viewModel:ViewModel />
     </Window.DataContext>
     
-    <Grid Margin="10">
+    <Grid Margin="{Binding Margin}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="2*"/>
@@ -19,30 +22,31 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" MinHeight="50" />
+            <RowDefinition Height="Auto" MinHeight="{Binding UIAreaHeight}" />
             <RowDefinition/>
         </Grid.RowDefinitions>
         
         <TextBlock VerticalAlignment="Center" TextWrapping="Wrap" Text="How many balls to add/create"></TextBlock>
         
-        <TextBox Grid.Column="1" Margin="10.0" VerticalAlignment="Center" Text="{Binding BallCount, UpdateSourceTrigger=PropertyChanged, TargetNullValue=0}"/>
+        <TextBox Grid.Column="1" Margin="{Binding Margin}" VerticalAlignment="Center" Text="{Binding BallCount, UpdateSourceTrigger=PropertyChanged, TargetNullValue=0}"/>
         
-        <Button Grid.Column="2" Margin="5.0" Content="Add" Command="{Binding AddCommand}"/>
+        <Button Grid.Column="2" Margin="{Binding Margin}" Content="Add" Command="{Binding AddCommand}"/>
         
-        <Button Grid.Column="3" Margin="5.0" Content="Create" Command="{Binding CreateCommand}"/>
+        <Button Grid.Column="3" Margin="{Binding Margin}" Content="Create" Command="{Binding CreateCommand}"/>
         
         <!-- CANVAS -->
-        <ItemsControl Grid.Row="1" Grid.ColumnSpan="4" ItemsSource="{Binding BallsCollection}">
+        <ItemsControl x:Name="RootItemsControl" Grid.Row="1" Grid.ColumnSpan="4" ItemsSource="{Binding BallsCollection}">
+            
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <Canvas Background="Green"></Canvas>
+                    <Canvas Background="Green"/>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
             
             <ItemsControl.ItemContainerStyle>
                 <Style>
-                    <Setter Property="Canvas.Left" Value="{Binding PositionX}" />
-                    <Setter Property="Canvas.Top" Value="{Binding PositionY}" />
+                    <Setter Property="Canvas.Left" Value="{Binding Left}" />
+                    <Setter Property="Canvas.Top" Value="{Binding Top}" />
                 </Style>
             </ItemsControl.ItemContainerStyle>
             

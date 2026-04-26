@@ -8,6 +8,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Presentation.ViewModel;
 
 namespace ConcurrentProgramming
 {
@@ -18,8 +19,19 @@ namespace ConcurrentProgramming
     {
         public MainWindow()
         {
-
             InitializeComponent();
+            // if (DataContext is ViewModel viewModel)
+            // {
+            //     
+            // }
+        }
+        
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            // if (DataContext is ViewModel viewModel)
+            // {
+            //     
+            // }
         }
     }
 }

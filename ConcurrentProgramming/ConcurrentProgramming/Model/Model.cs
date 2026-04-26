@@ -19,9 +19,16 @@ namespace Presentation.Model
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private Vector2 m_Position;
-        private Vector2 m_Velocity;
+        // private Vector2 m_Velocity;
         private float m_Radius;
         public float Diameter => m_Radius * 2;
+
+        public BallModel(Vector2 pos, float r)
+        {
+            // pos = new Vector2(pos.X + r, pos.Y + r);
+            m_Position = pos;
+            m_Radius = r;
+        }
 
         public double PositionX
         {
@@ -42,26 +49,29 @@ namespace Presentation.Model
                 OnPropertyChanged(nameof(PositionY));
             }
         }
-        
-        public double VelocityX
-        {
-            get => m_Velocity.X;
-            set
-            {
-                m_Velocity = new Vector2((float)value, m_Velocity.Y); 
-                OnPropertyChanged(nameof(VelocityX));
-            }
-        }
-        
-        public double VelocityY
-        {
-            get => m_Velocity.Y;
-            set
-            {
-                m_Velocity = new Vector2(m_Velocity.X, (float)value); 
-                OnPropertyChanged(nameof(VelocityY));
-            }
-        }
-        
+
+        public double Left => m_Position.X - m_Radius;
+        public double Top => m_Position.Y - m_Radius;
+
+        // public double VelocityX
+        // {
+        //     get => m_Velocity.X;
+        //     set
+        //     {
+        //         m_Velocity = new Vector2((float)value, m_Velocity.Y); 
+        //         OnPropertyChanged(nameof(VelocityX));
+        //     }
+        // }
+        //
+        // public double VelocityY
+        // {
+        //     get => m_Velocity.Y;
+        //     set
+        //     {
+        //         m_Velocity = new Vector2(m_Velocity.X, (float)value); 
+        //         OnPropertyChanged(nameof(VelocityY));
+        //     }
+        // }
+
     }
 }
