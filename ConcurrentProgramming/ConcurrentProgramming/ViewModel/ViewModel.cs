@@ -38,7 +38,7 @@ namespace Presentation.ViewModel
         }
 
         public ObservableCollection<BallModel> BallsCollection { get; } = new();
-        private LogicManager m_LogicManager;
+        private ILogicManager m_LogicManager;
         
         private float m_CanvasWidth = 800;
         public float CanvasWidth
