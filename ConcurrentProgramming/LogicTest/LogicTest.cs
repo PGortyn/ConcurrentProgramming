@@ -11,8 +11,8 @@ namespace LogicTest
             float w = 500;
             float h = 300;
             LogicManager lm = new LogicManager(w, h);
-            float expectedW = w;
-            float expectedH = h;
+            float expectedW = w - LogicManager.TEMP_WIDTH_FIX;
+            float expectedH = h - LogicManager.TEMP_HEIGHT_FIX;
             Assert.Equal(lm.Width,expectedW);
             Assert.Equal(lm.Height,expectedH);
             

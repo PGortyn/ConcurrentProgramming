@@ -5,6 +5,9 @@ namespace Logic
 {
     public class LogicManager
     {
+        public static float TEMP_WIDTH_FIX = 38;
+        public static float TEMP_HEIGHT_FIX = 110;
+        
         public event EventHandler OnBallsUpdated;
         public List<Ball> Balls = new List<Ball>();
         public float Width { get; private set; }
@@ -12,7 +15,7 @@ namespace Logic
         private const int MAX_VELOCITY = 5;
         private const float MIN_RADIUS = 10f;
         private const float MAX_RADIUS = 30f;
-
+        
         public LogicManager(float width, float height)
         {
             UpdateSize(width, height);
@@ -55,8 +58,8 @@ namespace Logic
         public void UpdateSize(float width, float height)
         {
             // TEMP FIX Later
-            Width = width - 38;
-            Height = height - 110;
+            Width = width - TEMP_WIDTH_FIX;
+            Height = height - TEMP_HEIGHT_FIX;
         }
     }
 }
