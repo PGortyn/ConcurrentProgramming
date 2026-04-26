@@ -12,7 +12,7 @@ public class BallCollection : IBallCollection
         return m_Balls;
     }
 
-    public void AddBalls(int amount, float canvasWidth, float canvaHeight, bool forceClear = false)
+    public void AddBalls(int amount, float canvasWidth, float canvasHeight, bool forceClear = false)
     {
         if (forceClear)
         {
@@ -23,11 +23,14 @@ public class BallCollection : IBallCollection
         {
             float radius = ((float)rand.NextDouble() * (ABall.MAX_RADIUS - ABall.MIN_RADIUS)) + ABall.MIN_RADIUS;
             float posX = (float)rand.NextDouble() * (canvasWidth - radius) + radius;
-            // posX = Math.Clamp(posX, 0, Width);
-            float posY = (float)rand.NextDouble() * (canvaHeight - radius) + radius;
-            // posY = Math.Clamp(posY, 0, Height);
+            posX = Math.Clamp(posX, radius, canvasWidth - radius);
+            float posY = (float)rand.NextDouble() * (canvasHeight - radius) + radius;
+            posY = Math.Clamp(posY, radius, canvasHeight - radius);
             Vector2 pos = new Vector2(posX, posY);
-            Vector2 vel = new Vector2(rand.Next(-ABall.MAX_VELOCITY, ABall.MAX_VELOCITY), rand.Next(-ABall.MAX_VELOCITY, ABall.MAX_VELOCITY));
+            
+            float velX = ((float)rand.NextDouble() * (ABall.MAX_VELOCITY * 2)) - ABall.MAX_VELOCITY;
+            float velY = ((float)rand.NextDouble() * (ABall.MAX_VELOCITY * 2)) - ABall.MAX_VELOCITY;
+            Vector2 vel = new Vector2(velX, velY);
             Ball ball = new Ball(pos, vel, radius);
             m_Balls.Add(ball);
         }
