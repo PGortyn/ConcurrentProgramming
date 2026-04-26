@@ -2,12 +2,8 @@
 
 namespace Data
 {
-    public class Ball
+    public class Ball: ABall
     {
-        public Vector2 Position { get; private set; }
-        public Vector2 Velocity { get; private set; }
-        public float Radius { get; private set; }
-            
         public Ball(Vector2 pos, Vector2 vel, float r)
         {
             Position = pos;
@@ -15,7 +11,7 @@ namespace Data
             Radius = r;
         }
 
-        public void UpdatePosition(float maxHeight, float maxWidth)
+        public override void UpdatePosition(float maxHeight, float maxWidth)
         {
             Position += Velocity;
             float posX = Math.Clamp(Position.X, Radius, maxWidth - Radius);

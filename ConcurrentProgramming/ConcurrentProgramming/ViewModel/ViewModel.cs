@@ -112,7 +112,8 @@ namespace Presentation.ViewModel
         private void OnLogicUpdated(object? sender, EventArgs e)
         {
             BallsCollection.Clear();
-            foreach (Ball ball in m_LogicManager.Balls)
+            List<Ball> Balls = m_LogicManager.GetBalls();
+            foreach (Ball ball in Balls)
             {
                 BallsCollection.Add(new BallModel(ball.Position, ball.Radius));
             }
