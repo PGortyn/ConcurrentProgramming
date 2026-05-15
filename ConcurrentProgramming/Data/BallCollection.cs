@@ -31,7 +31,7 @@ public class BallCollection : IBallCollection
             float velX = ((float)rand.NextDouble() * (ABall.MAX_VELOCITY * 2)) - ABall.MAX_VELOCITY;
             float velY = ((float)rand.NextDouble() * (ABall.MAX_VELOCITY * 2)) - ABall.MAX_VELOCITY;
             Vector2 vel = new Vector2(velX, velY);
-            Ball ball = new Ball(pos, vel, radius);
+            Ball ball = new Ball(pos, vel, radius, m_Balls.Count);
             m_Balls.Add(ball);
         }
     }

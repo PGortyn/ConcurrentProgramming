@@ -40,21 +40,24 @@ namespace Logic
         public void Update()
         {
             List<Ball> Balls = m_BallCollection.GetBalls();
-            for (int i = 0; i < Balls.Count; i++)
+            Parallel.ForEach(Balls, ball =>
             {
-                Ball ball = Balls[i];
                 if (ball != null)
                 {
                     ball.UpdatePosition(Height, Width);
+                    HandleWallCollision(ball);
                 }
-                float r = ball.Radius;
-                if (ball.Position.X - r <= 0 || ball.Position.X + r >= Width)
+            });
+            for (int i = 0; i < Balls.Count; i++)
+            {
+                for (int j = i + 1; j < Balls.Count; j++)
                 {
-                    ball.MirrorXVelocity();
-                }
-                if (ball.Position.Y - r <= 0 || ball.Position.Y + r >= Height)
-                {
-                    ball.MirrorYVelocity();
+                    Ball ballA = Balls[i];
+                    Ball ballB = Balls[j];
+                    if (AreBallsColliding(ballA, ballB))
+                    {
+                        HandleBallCollision(ballA, ballB);
+                    }
                 }
             }
             OnBallsUpdated?.Invoke(this, EventArgs.Empty);
@@ -65,6 +68,45 @@ namespace Logic
             // TEMP FIX Later
             Width = width - TEMP_WIDTH_FIX;
             Height = height - TEMP_HEIGHT_FIX;
+        }
+        
+        public void HandleWallCollision(ABall ball)
+        {
+            float r = ball.Radius;
+            if (ball.Position.X - r <= 0 || ball.Position.X + r >= Width)
+            {
+                ball.MirrorXVelocity();
+            }
+            if (ball.Position.Y - r <= 0 || ball.Position.Y + r >= Height)
+            {
+                ball.MirrorYVelocity();
+            }
+        }
+        
+        public bool AreBallsColliding(ABall ballA, ABall ballB)
+        {
+            return Vector2.Distance(ballA.Position, ballB.Position) <= ballA.Radius + ballB.Radius;
+        }
+        
+        public void HandleBallCollision(ABall ballA, ABall ballB)
+        {
+            ABall first = ballA.ID < ballB.ID ? ballA : ballB;
+            ABall second = ballA.ID < ballB.ID ? ballB : ballA;
+
+            lock (first.Sync)
+            {
+                lock (second.Sync)
+                {
+                    // Test 
+                    first.MirrorXVelocity();
+                    first.MirrorYVelocity();
+                    second.MirrorXVelocity();
+                    second.MirrorYVelocity();
+                    Vector2 vel1 = first.Velocity;
+                    Vector2 vel2 = second.Velocity;
+                    Vector2 newVel1 = vel1 * (-1 * vel2);
+                }
+            }
         }
     }
 }

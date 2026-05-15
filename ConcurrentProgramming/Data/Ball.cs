@@ -4,11 +4,13 @@ namespace Data
 {
     public class Ball: ABall
     {
-        public Ball(Vector2 pos, Vector2 vel, float r)
+        public Ball(Vector2 pos, Vector2 vel, float r, int id = 0)
         {
+            ID = id;
             Position = pos;
             Velocity = vel;
             Radius = r;
+            Mass = Radius * Radius;
         }
 
         public override void UpdatePosition(float maxHeight, float maxWidth)

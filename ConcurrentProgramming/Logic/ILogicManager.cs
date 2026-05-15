@@ -9,4 +9,7 @@ public interface ILogicManager
     public List<Ball> GetBalls();
     public void Update();
     public void UpdateSize(float width, float height);
+    public void HandleWallCollision(ABall ball);
+    public bool AreBallsColliding(ABall ballA, ABall ballB);
+    public void HandleBallCollision(ABall ballA, ABall ballB);
 }
