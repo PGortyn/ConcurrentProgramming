@@ -10,6 +10,9 @@ public abstract class ABall
     public Vector2 Position { get; protected set; }
     public Vector2 Velocity { get; protected set; }
     public float Radius { get; protected set; }
+    public float Mass { get; protected set; }
 
     public abstract void UpdatePosition(float maxHeight, float maxWidth);
+    public abstract void MirrorXVelocity();
+    public abstract void MirrorYVelocity();
 }

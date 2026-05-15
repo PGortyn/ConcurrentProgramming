@@ -47,6 +47,15 @@ namespace Logic
                 {
                     ball.UpdatePosition(Height, Width);
                 }
+                float r = ball.Radius;
+                if (ball.Position.X - r <= 0 || ball.Position.X + r >= Width)
+                {
+                    ball.MirrorXVelocity();
+                }
+                if (ball.Position.Y - r <= 0 || ball.Position.Y + r >= Height)
+                {
+                    ball.MirrorYVelocity();
+                }
             }
             OnBallsUpdated?.Invoke(this, EventArgs.Empty);
         }

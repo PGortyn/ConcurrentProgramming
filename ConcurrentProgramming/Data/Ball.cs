@@ -18,5 +18,14 @@ namespace Data
             float posY = Math.Clamp(Position.Y, Radius, maxHeight - Radius);
             Position = new Vector2(posX, posY);
         }
+        
+        public override void MirrorXVelocity()
+        {
+            Velocity = new Vector2(-1 * Velocity.X, Velocity.Y);
+        }
+        public override void MirrorYVelocity()
+        {
+            Velocity = new Vector2(Velocity.X, -1 * Velocity.Y);
+        }
     }
 }
