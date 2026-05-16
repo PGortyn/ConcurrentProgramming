@@ -104,11 +104,11 @@ namespace Logic
                 {
                     // Test 
                     Vector2 v1 = first.Velocity;
-                    Vector2 p1 = first.Position + v1;
+                    Vector2 p1 = first.Position;
                     float m1 = first.Mass;
                     
                     Vector2 v2 = second.Velocity;
-                    Vector2 p2 = second.Position + v2;
+                    Vector2 p2 = second.Position;
                     float m2 = second.Mass;
                     
                     // collision normal

@@ -35,4 +35,13 @@ public class BallCollection : IBallCollection
             m_Balls.Add(ball);
         }
     }
+
+    public void AddBalls(Ball ball, bool forceClear = false)
+    {
+        if (forceClear)
+        {
+            m_Balls.Clear();
+        }
+        m_Balls.Add(ball);
+    }
 }

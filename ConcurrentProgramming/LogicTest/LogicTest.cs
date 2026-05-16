@@ -1,3 +1,4 @@
+using System.Numerics;
 using Data;
 using Logic;
 
@@ -5,6 +6,30 @@ namespace LogicTest
 {
     public class LogicTest
     {
+        private class TestCollection : IBallCollection
+        {
+            private readonly List<Ball> Balls = new List<Ball>();
+            public List<Ball> GetBalls() => Balls;
+            public void AddBalls(int amount, float canvasWidth, float canvasHeight, bool forceClear = false) {}
+            public void AddBalls(Ball ball, bool forceClear = false)
+            {
+                if (forceClear)
+                {
+                    Balls.Clear();
+                }
+                Balls.Add(ball);
+            }
+        }
+
+        private ILogicManager CreateLogicWithBalls(Ball ball1, Ball ball2, float width, float height)
+        {
+            IBallCollection testCollection = new TestCollection();
+            testCollection.AddBalls(ball1);
+            testCollection.AddBalls(ball2);
+            ILogicManager testLogic = new LogicManager(testCollection, width, height);
+            return testLogic;
+        }
+        
         [Fact]
         public void CreateLogicManagerTest()
         {
@@ -75,6 +100,57 @@ namespace LogicTest
             {
                 Assert.Equal(oldY, expectedY);
             }
+        }
+
+        [Fact]
+        public void BallWallBounceTest()
+        {
+            float w = 500;
+            float h = 300;
+            Ball ball1 = new Ball(new Vector2(250, 299), new Vector2(0, 1), 1, 1);
+            Ball ball2 = new Ball(new Vector2(1, 150), new Vector2(-1, 0), 1, 2);
+            ILogicManager lm = CreateLogicWithBalls(ball1, ball2, w, h);
+            lm.Update();
+            float expectedVel1X = 0;
+            float expectedVel1Y = -1;
+            float expectedVel2X = 1;
+            float expectedVel2Y = 0;
+            List<Ball> balls = lm.GetBalls();
+            float vel1X = balls[0].Velocity.X;
+            float vel1Y = balls[0].Velocity.Y;
+            float vel2X = balls[1].Velocity.X;
+            float vel2Y = balls[1].Velocity.Y;
+            
+            Assert.Equal(vel1X, expectedVel1X);
+            Assert.Equal(vel1Y, expectedVel1Y);
+            Assert.Equal(vel2X, expectedVel2X);
+            Assert.Equal(vel2Y, expectedVel2Y);
+        }
+
+        [Fact]
+        public void BallsCollisionTest()
+        {
+            float w = 500;
+            float h = 300;
+            Ball ball1 = new Ball(new Vector2(248.5f, 150), new Vector2(1, 0), 1, 1);
+            Ball ball2 = new Ball(new Vector2(251.3f, 150), new Vector2(-1, 0), 1, 2);
+            ILogicManager lm = CreateLogicWithBalls(ball1, ball2, w, h);
+            
+            lm.Update();
+            float expectedVel1X = -1;
+            float expectedVel1Y = 0;
+            float expectedVel2X = 1;
+            float expectedVel2Y = 0;
+            List<Ball> balls = lm.GetBalls();
+            float vel1X = balls[0].Velocity.X;
+            float vel1Y = balls[0].Velocity.Y;
+            float vel2X = balls[1].Velocity.X;
+            float vel2Y = balls[1].Velocity.Y;
+            
+            Assert.Equal(vel1X, expectedVel1X);
+            Assert.Equal(vel1Y, expectedVel1Y);
+            Assert.Equal(vel2X, expectedVel2X);
+            Assert.Equal(vel2Y, expectedVel2Y);
         }
     }
 }
