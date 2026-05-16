@@ -5,6 +5,8 @@ namespace Logic
 {
     public class LogicManager : ILogicManager
     {
+        public readonly object UpdateLock = new object();
+        
         public static float TEMP_WIDTH_FIX = 38;
         public static float TEMP_HEIGHT_FIX = 110;
         
@@ -39,28 +41,31 @@ namespace Logic
 
         public void Update()
         {
-            List<Ball> Balls = m_BallCollection.GetBalls();
-            Parallel.ForEach(Balls, ball =>
+            lock (UpdateLock)
             {
-                if (ball != null)
+                List<Ball> Balls = m_BallCollection.GetBalls();
+                Parallel.ForEach(Balls, ball =>
                 {
-                    ball.UpdatePosition(Height, Width);
-                    HandleWallCollision(ball);
-                }
-            });
-            for (int i = 0; i < Balls.Count; i++)
-            {
-                for (int j = i + 1; j < Balls.Count; j++)
-                {
-                    Ball ballA = Balls[i];
-                    Ball ballB = Balls[j];
-                    if (AreBallsColliding(ballA, ballB))
+                    if (ball != null)
                     {
-                        HandleBallCollision(ballA, ballB);
+                        ball.UpdatePosition(Height, Width);
+                        HandleWallCollision(ball);
+                    }
+                });
+                for (int i = 0; i < Balls.Count; i++)
+                {
+                    for (int j = i + 1; j < Balls.Count; j++)
+                    {
+                        Ball ballA = Balls[i];
+                        Ball ballB = Balls[j];
+                        if (AreBallsColliding(ballA, ballB))
+                        {
+                            HandleBallCollision(ballA, ballB);
+                        }
                     }
                 }
+                OnBallsUpdated?.Invoke(this, EventArgs.Empty);
             }
-            OnBallsUpdated?.Invoke(this, EventArgs.Empty);
         }
 
         public void UpdateSize(float width, float height)
@@ -98,13 +103,52 @@ namespace Logic
                 lock (second.Sync)
                 {
                     // Test 
-                    first.MirrorXVelocity();
-                    first.MirrorYVelocity();
-                    second.MirrorXVelocity();
-                    second.MirrorYVelocity();
-                    Vector2 vel1 = first.Velocity;
-                    Vector2 vel2 = second.Velocity;
-                    Vector2 newVel1 = vel1 * (-1 * vel2);
+                    Vector2 v1 = first.Velocity;
+                    Vector2 p1 = first.Position + v1;
+                    float m1 = first.Mass;
+                    
+                    Vector2 v2 = second.Velocity;
+                    Vector2 p2 = second.Position + v2;
+                    float m2 = second.Mass;
+                    
+                    // collision normal
+                    Vector2 norm = p2 - p1;
+                    float distance = norm.Length();
+                    if (distance == 0) return;
+                    norm /= distance;
+                    
+                    // relative velocity
+                    Vector2 relativeVel = v2 - v1;
+                    float velAlongNorm = Vector2.Dot(relativeVel, norm);
+                    
+                    if (velAlongNorm > 0) return;
+
+                    // Elasticity (1 = perfectly elastic
+                    float e = 1;
+                    // impulse scalar
+                    float impulseScalar = -(1 + e) * velAlongNorm;
+                    impulseScalar /= (1 / m1) + (1 / m2);
+                    Vector2 impulse = impulseScalar * norm;
+
+                    v1 -= impulse / m1;
+                    v2 += impulse / m2;
+
+                    first.SetVelocity(v1);
+                    second.SetVelocity(v2);
+                    
+                    // Correct position slightly
+                    float penetration = first.Radius + ballB.Radius - distance;
+                    if (penetration > 0)
+                    {
+                        float percent = 0.8f;
+                        Vector2 correction = norm * penetration * percent;
+
+                        p1 -= correction / m1;
+                        p2 += correction / m2;
+
+                        first.SetPosition(p1);
+                        second.SetPosition(p2);
+                    }
                 }
             }
         }
