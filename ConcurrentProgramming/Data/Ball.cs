@@ -29,5 +29,15 @@ namespace Data
         {
             Velocity = new Vector2(Velocity.X, -1 * Velocity.Y);
         }
+
+        public override void SetVelocity(Vector2 v)
+        {
+            Velocity = v;
+        }
+
+        public override void SetPosition(Vector2 p)
+        {
+            Position = p;
+        }
     }
 }
