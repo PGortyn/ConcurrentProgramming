@@ -52,7 +52,7 @@ namespace Logic
                         HandleWallCollision(ball);
                     }
                 });
-                for (int i = 0; i < Balls.Count; i++)
+                Parallel.For(0, Balls.Count, i =>
                 {
                     for (int j = i + 1; j < Balls.Count; j++)
                     {
@@ -63,7 +63,7 @@ namespace Logic
                             HandleBallCollision(ballA, ballB);
                         }
                     }
-                }
+                });
                 OnBallsUpdated?.Invoke(this, EventArgs.Empty);
             }
         }
