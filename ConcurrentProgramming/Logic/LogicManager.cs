@@ -1,11 +1,14 @@
 ﻿using System.Numerics;
 using Data;
+using Timer = System.Timers.Timer;
 
 namespace Logic
 {
     public class LogicManager : ILogicManager
     {
-        public readonly object UpdateLock = new object();
+        private readonly object UpdateLock = new object();
+
+        private readonly Timer m_Timer;
         
         public static float TEMP_WIDTH_FIX = 38;
         public static float TEMP_HEIGHT_FIX = 110;
@@ -27,6 +30,15 @@ namespace Logic
         {
             m_BallCollection = new BallCollection();
             UpdateSize(width, height);
+            
+            m_Timer = new Timer();
+            m_Timer.Elapsed += (sender, e) =>
+            {
+                Update();
+                OnBallsUpdated?.Invoke(this, EventArgs.Empty);
+            };
+            m_Timer.Interval = 16;
+            m_Timer.Start();
         }
 
         public void AddBalls(int amount, bool forceClear = false)
@@ -64,7 +76,6 @@ namespace Logic
                         }
                     }
                 });
-                OnBallsUpdated?.Invoke(this, EventArgs.Empty);
             }
         }
 
