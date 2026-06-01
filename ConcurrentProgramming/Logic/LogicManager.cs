@@ -27,21 +27,27 @@ namespace Logic
         public float Width { get; private set; }
         public float Height { get; private set; }
 
-        public LogicManager(IBallCollection ballCollection, float width, float height)
+        public LogicManager(IBallCollection ballCollection, float width, float height, bool createLogger = true)
         {
             m_BallCollection = ballCollection;
             UpdateSize(width, height);
 
-            m_Logger = new Logger();
+            if (createLogger)
+            {
+                m_Logger = new Logger();
+            }
         }
         
-        public LogicManager(float width, float height)
+        public LogicManager(float width, float height, bool createLogger = true)
         {
             m_BallCollection = new BallCollection();
             UpdateSize(width, height);
 
-            m_Logger = new Logger();
-            
+            if (createLogger)
+            {
+                m_Logger = new Logger();
+            }
+
             m_Timer = new Timer();
             m_Timer.Elapsed += (sender, e) =>
             {
@@ -68,16 +74,20 @@ namespace Logic
             return m_BallCollection.GetBalls();
         }
 
-        public void Update()
+        public void Update(float delta = 0)
         {
             lock (UpdateLock)
             {
+                if (delta == 0)
+                {
+                    delta = m_DeltaTime;
+                }
                 List<Ball> Balls = m_BallCollection.GetBalls();
                 Parallel.ForEach(Balls, ball =>
                 {
                     if (ball != null)
                     {
-                        ball.UpdatePosition(Height, Width, m_DeltaTime);
+                        ball.UpdatePosition(Height, Width, delta);
                         HandleWallCollision(ball);
                     }
                 });
@@ -120,7 +130,7 @@ namespace Logic
                 hasCollided = true;
                 collisionPos.Y = ball.Position.Y - r <= 0 ? 0 : Height;
             }
-            if (hasCollided)
+            if (hasCollided && m_Logger != null)
             {
                 m_Logger.LogWallCollision(ball, collisionPos);
             }
@@ -189,7 +199,10 @@ namespace Logic
                     }
                 }
             }
-            m_Logger.LogBallsCollision(ballA, ballB, (ballA.Position + ballB.Position) / 2);
+            if (m_Logger != null)
+            {
+                m_Logger.LogBallsCollision(ballA, ballB, (ballA.Position + ballB.Position) / 2);
+            }
         }
     }
 }

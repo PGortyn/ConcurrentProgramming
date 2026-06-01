@@ -3,8 +3,8 @@ namespace Data;
 
 public abstract class ABall
 {
+    public const float VELOCITY_MULT = 20;
     public static int MAX_VELOCITY = 5;
-    public static float VELOCITY_MULT = 20;
     public static float MIN_RADIUS = 10f;
     public static float MAX_RADIUS = 30f;
     
@@ -34,6 +34,13 @@ public abstract class ABall
         protected set { lock (Sync) { m_Mass = value; } }
     }
     public int ID { get; protected set; }
+
+    protected float m_VelocityMultiplier = VELOCITY_MULT;
+    public float VelocityMultiplier
+    {
+        get { return m_VelocityMultiplier; }
+        protected set { m_VelocityMultiplier = value; }
+    }
 
     public abstract void UpdatePosition(float maxHeight, float maxWidth, float deltaTime);
     public abstract void MirrorXVelocity();

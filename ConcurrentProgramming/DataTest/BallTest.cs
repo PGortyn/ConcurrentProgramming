@@ -24,10 +24,30 @@ namespace DataTest
         [Fact]
         public void UpdateBallPositionTest()
         {
-            Ball b = new Ball(new Vector2(150, 150), new Vector2(1, -1), 1);
-            float expectedX = 151;
-            float expectedY = 149;
-            b.UpdatePosition(300, 300, 1);
+            Vector2 pos = new Vector2(150, 150);
+            Vector2 vel = new Vector2(1, -1);
+            float time = 1;
+            Ball b = new Ball(pos, vel, 1);
+            float expectedX = pos.X + (time * b.VelocityMultiplier) * vel.X;
+            float expectedY = pos.Y + (time * b.VelocityMultiplier) * vel.Y;
+            b.UpdatePosition(300, 300, time);
+            float bX = b.Position.X;
+            float bY = b.Position.Y;
+            
+            Assert.Equal(bX, expectedX);
+            Assert.Equal(bY, expectedY);
+        }
+
+        [Fact]
+        public void UpdateBallPositionHalfTest()
+        {
+            Vector2 pos = new Vector2(150, 150);
+            Vector2 vel = new Vector2(1, -1);
+            float time = 0.5f;
+            Ball b = new Ball(pos, vel, 1);
+            float expectedX = pos.X + (time * b.VelocityMultiplier) * vel.X;
+            float expectedY = pos.Y + (time * b.VelocityMultiplier) * vel.Y;
+            b.UpdatePosition(300, 300, time);
             float bX = b.Position.X;
             float bY = b.Position.Y;
             

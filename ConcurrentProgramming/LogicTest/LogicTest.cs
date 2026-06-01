@@ -26,7 +26,7 @@ namespace LogicTest
             IBallCollection testCollection = new TestCollection();
             testCollection.AddBalls(ball1);
             testCollection.AddBalls(ball2);
-            ILogicManager testLogic = new LogicManager(testCollection, width, height);
+            ILogicManager testLogic = new LogicManager(testCollection, width, height, createLogger: false);
             return testLogic;
         }
         
@@ -35,7 +35,7 @@ namespace LogicTest
         {
             float w = 500;
             float h = 300;
-            LogicManager lm = new LogicManager(w, h);
+            LogicManager lm = new LogicManager(w, h, createLogger: false);
             float expectedW = w - LogicManager.TEMP_WIDTH_FIX;
             float expectedH = h - LogicManager.TEMP_HEIGHT_FIX;
             Assert.Equal(lm.Width,expectedW);
@@ -47,7 +47,7 @@ namespace LogicTest
         {
             float w = 500;
             float h = 300;
-            LogicManager lm = new LogicManager(w, h);
+            LogicManager lm = new LogicManager(w, h, createLogger: false);
             
             lm.AddBalls(4);
             List<Ball> Balls = lm.GetBalls();
@@ -66,19 +66,19 @@ namespace LogicTest
         }
 
         [Fact]
-        public void UpdateNonRealTimeTest()
+        public void UpdateTest()
         {
             float w = 500;
             float h = 300;
-            LogicManager lm = new LogicManager(w, h);
+            LogicManager lm = new LogicManager(w, h, createLogger: false);
             
-            lm.AddBalls(1);
+            lm.AddBalls(20);
             List<Ball> Balls = lm.GetBalls();
             Ball ball = Balls[0];
             float oldX = ball.Position.X;
             float oldY = ball.Position.Y;
             
-            lm.Update();
+            lm.Update(1);
             Balls = lm.GetBalls();
             float expectedX = Balls[0].Position.X;
             float expectedY = Balls[0].Position.Y;
@@ -107,10 +107,10 @@ namespace LogicTest
         {
             float w = 500;
             float h = 300;
-            Ball ball1 = new Ball(new Vector2(250, 299), new Vector2(0, 1), 1, 1);
-            Ball ball2 = new Ball(new Vector2(1, 150), new Vector2(-1, 0), 1, 2);
+            Ball ball1 = new Ball(new Vector2(250, 299), new Vector2(0, 1), 1, 1, decreaseVelocityMult: true);
+            Ball ball2 = new Ball(new Vector2(1, 150), new Vector2(-1, 0), 1, 2, decreaseVelocityMult: true);
             ILogicManager lm = CreateLogicWithBalls(ball1, ball2, w, h);
-            lm.Update();
+            lm.Update(1);
             float expectedVel1X = 0;
             float expectedVel1Y = -1;
             float expectedVel2X = 1;
@@ -132,11 +132,11 @@ namespace LogicTest
         {
             float w = 500;
             float h = 300;
-            Ball ball1 = new Ball(new Vector2(248.5f, 150), new Vector2(1, 0), 1, 1);
-            Ball ball2 = new Ball(new Vector2(251.3f, 150), new Vector2(-1, 0), 1, 2);
+            Ball ball1 = new Ball(new Vector2(248.5f, 150), new Vector2(1, 0), 1, 1, decreaseVelocityMult: true);
+            Ball ball2 = new Ball(new Vector2(251.3f, 150), new Vector2(-1, 0), 1, 2, decreaseVelocityMult: true);
             ILogicManager lm = CreateLogicWithBalls(ball1, ball2, w, h);
             
-            lm.Update();
+            lm.Update(1);
             float expectedVel1X = -1;
             float expectedVel1Y = 0;
             float expectedVel2X = 1;
