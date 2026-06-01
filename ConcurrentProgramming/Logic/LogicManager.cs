@@ -17,6 +17,8 @@ namespace Logic
         private readonly Stopwatch m_StopWatch = new Stopwatch();
         private long m_LastTicks;
         public float m_DeltaTime;
+
+        private Logger m_Logger;
         
         public event EventHandler OnBallsUpdated;
 
@@ -29,12 +31,16 @@ namespace Logic
         {
             m_BallCollection = ballCollection;
             UpdateSize(width, height);
+
+            m_Logger = new Logger();
         }
         
         public LogicManager(float width, float height)
         {
             m_BallCollection = new BallCollection();
             UpdateSize(width, height);
+
+            m_Logger = new Logger();
             
             m_Timer = new Timer();
             m_Timer.Elapsed += (sender, e) =>
@@ -100,13 +106,23 @@ namespace Logic
         public void HandleWallCollision(ABall ball)
         {
             float r = ball.Radius;
+            bool hasCollided = false;
+            Vector2 collisionPos = ball.Position;
             if (ball.Position.X - r <= 0 || ball.Position.X + r >= Width)
             {
                 ball.MirrorXVelocity();
+                hasCollided = true;
+                collisionPos.X = ball.Position.X - r <= 0 ? 0 : Width;
             }
             if (ball.Position.Y - r <= 0 || ball.Position.Y + r >= Height)
             {
                 ball.MirrorYVelocity();
+                hasCollided = true;
+                collisionPos.Y = ball.Position.Y - r <= 0 ? 0 : Height;
+            }
+            if (hasCollided)
+            {
+                m_Logger.LogWallCollision(ball, collisionPos);
             }
         }
         
@@ -173,6 +189,7 @@ namespace Logic
                     }
                 }
             }
+            m_Logger.LogBallsCollision(ballA, ballB, (ballA.Position + ballB.Position) / 2);
         }
     }
 }
