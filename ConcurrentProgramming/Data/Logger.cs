@@ -96,9 +96,9 @@ public class Logger : IDisposable
         if (ball != null)
         {
             string entryTime = DateTime.Now.ToString("u");
-            string radius = ball.Radius.ToString();
+            string ID = ball.ID.ToString();
             string position = $"({pos.X}, {pos.Y})";
-            string entry = $"At {entryTime} Ball of radius: {radius} collided with wall at: {position}";
+            string entry = $"At {entryTime} Ball of ID: {ID} collided with wall at: {position}";
             m_LogQueue.Enqueue(entry);
         }
     }
@@ -108,10 +108,10 @@ public class Logger : IDisposable
         if (ball1 != null && ball2 != null)
         {
             string entryTime = DateTime.Now.ToString("u");
-            string radius1 = ball1.Radius.ToString();
-            string radius2 = ball2.Radius.ToString();
+            string ID1 = ball1.ID.ToString();
+            string ID2 = ball2.ID.ToString();
             string position = $"({pos.X}, {pos.Y})";
-            string entry = $"At {entryTime} Ball of radius: {radius1} collided with ball of radius: {radius2} at: {position}";
+            string entry = $"At {entryTime} Ball of ID: {ID1} collided with ball of ID: {ID2} at: {position}";
             m_LogQueue.Enqueue(entry);
         }
     }
