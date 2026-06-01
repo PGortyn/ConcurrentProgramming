@@ -13,9 +13,9 @@ namespace Data
             Mass = Radius * Radius;
         }
 
-        public override void UpdatePosition(float maxHeight, float maxWidth)
+        public override void UpdatePosition(float maxHeight, float maxWidth, float deltaTime)
         {
-            Position += Velocity;
+            Position += Velocity * deltaTime * VELOCITY_MULT;
             float posX = Math.Clamp(Position.X, Radius, maxWidth - Radius);
             float posY = Math.Clamp(Position.Y, Radius, maxHeight - Radius);
             Position = new Vector2(posX, posY);

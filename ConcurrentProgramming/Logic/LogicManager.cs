@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
 using Data;
 using Timer = System.Timers.Timer;
+using System.Diagnostics;
 
 namespace Logic
 {
@@ -12,6 +13,10 @@ namespace Logic
         
         public static float TEMP_WIDTH_FIX = 38;
         public static float TEMP_HEIGHT_FIX = 110;
+        
+        private readonly Stopwatch m_StopWatch = new Stopwatch();
+        private long m_LastTicks;
+        public float m_DeltaTime;
         
         public event EventHandler OnBallsUpdated;
 
@@ -34,6 +39,12 @@ namespace Logic
             m_Timer = new Timer();
             m_Timer.Elapsed += (sender, e) =>
             {
+                m_StopWatch.Start();
+                long currTicks = m_StopWatch.ElapsedTicks;
+                long deltaTicks = currTicks - m_LastTicks;
+                m_LastTicks = currTicks;
+                m_DeltaTime = (float)deltaTicks / Stopwatch.Frequency;
+                // Console.WriteLine(m_DeltaTime.ToString());
                 Update();
                 OnBallsUpdated?.Invoke(this, EventArgs.Empty);
             };
@@ -60,7 +71,7 @@ namespace Logic
                 {
                     if (ball != null)
                     {
-                        ball.UpdatePosition(Height, Width);
+                        ball.UpdatePosition(Height, Width, m_DeltaTime);
                         HandleWallCollision(ball);
                     }
                 });

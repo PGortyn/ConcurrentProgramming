@@ -4,6 +4,7 @@ namespace Data;
 public abstract class ABall
 {
     public static int MAX_VELOCITY = 5;
+    public static float VELOCITY_MULT = 20;
     public static float MIN_RADIUS = 10f;
     public static float MAX_RADIUS = 30f;
     
@@ -34,7 +35,7 @@ public abstract class ABall
     }
     public int ID { get; protected set; }
 
-    public abstract void UpdatePosition(float maxHeight, float maxWidth);
+    public abstract void UpdatePosition(float maxHeight, float maxWidth, float deltaTime);
     public abstract void MirrorXVelocity();
     public abstract void MirrorYVelocity();
     public abstract void SetVelocity(Vector2 v);

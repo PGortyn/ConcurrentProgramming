@@ -27,7 +27,7 @@ namespace DataTest
             Ball b = new Ball(new Vector2(150, 150), new Vector2(1, -1), 1);
             float expectedX = 151;
             float expectedY = 149;
-            b.UpdatePosition(300, 300);
+            b.UpdatePosition(300, 300, 1);
             float bX = b.Position.X;
             float bY = b.Position.Y;
             
